@@ -1,5 +1,5 @@
 USAGE:
 ```bash
-go build main.go
+go build
 cat list.list | ./go-redirect
 ```
