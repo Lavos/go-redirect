@@ -11,13 +11,13 @@ const (
 )
 
 type Redirect struct {
-	URL string
+	URL           string
 	RedirectCount int
-  Status int
-  LastURL string
+	Status        int
+	LastURL       string
 }
 
-func main () {
+func main() {
 	list := make([]string, 0)
 	cursor := 0
 	response := make(chan Redirect)
@@ -55,11 +55,11 @@ func main () {
 	}
 }
 
-func doRequest (url string, response chan Redirect) {
+func doRequest(url string, response chan Redirect) {
 	redirects := 0
 
 	c := &http.Client{
-		CheckRedirect: func (req *http.Request, via []*http.Request) error {
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			redirects++
 			return nil
 		},
@@ -69,9 +69,9 @@ func doRequest (url string, response chan Redirect) {
 	resp, _ := c.Get(url)
 
 	response <- Redirect{
-		URL: url,
+		URL:           url,
 		RedirectCount: redirects,
-    Status: resp.StatusCode,
-    LastURL: resp.Request.URL.String(),
+		Status:        resp.StatusCode,
+		LastURL:       resp.Request.URL.String(),
 	}
 }
