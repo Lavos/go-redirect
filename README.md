@@ -1,5 +1,5 @@
 USAGE:
 ```bash
 $ go build
-$ cat list.list | ./go-redirect
+$ ./go-redirect < list.list > out.tsv
 ```
