@@ -13,6 +13,8 @@ const (
 type Redirect struct {
 	URL string
 	RedirectCount int
+  Status int
+  LastURL string
 }
 
 func main () {
@@ -49,7 +51,7 @@ func main () {
 	}
 
 	for _, r := range redirects {
-		fmt.Printf("%v\t%v\n", r.URL, r.RedirectCount)
+		fmt.Printf("%v\t%v\t%v\t%v\n", r.URL, r.Status, r.LastURL, r.RedirectCount)
 	}
 }
 
@@ -59,15 +61,17 @@ func doRequest (url string, response chan Redirect) {
 	c := &http.Client{
 		CheckRedirect: func (req *http.Request, via []*http.Request) error {
 			redirects++
-
 			return nil
 		},
 	}
 
 	log.Printf("checking url: %v", url)
-	c.Get(url)
+	resp, _ := c.Get(url)
+
 	response <- Redirect{
 		URL: url,
 		RedirectCount: redirects,
+    Status: resp.StatusCode,
+    LastURL: resp.Request.URL.String(),
 	}
 }
